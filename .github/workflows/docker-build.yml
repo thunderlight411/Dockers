@@ -55,7 +55,7 @@ jobs:
           context: ./containers/${{ matrix.container }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ matrix.container }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/${{ matrix.container }}:latest
           platforms: linux/amd64,linux/arm64
 
       - name: Scan image
