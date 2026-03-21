@@ -7,11 +7,12 @@ RUN apk add --no-cache \
     bash \
     openssh-client \
     sshpass \
-    mysql-client \
     unzip \
     zip \
     coreutils \
-    findutils
+    findutils \
+    mysql-client \
+    mysql-client-extra
 
 WORKDIR /app
 
