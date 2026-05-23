@@ -51,6 +51,33 @@ app.get("/flights", async (req, res) => {
   }
 });
 
+app.get("/weather/:z/:x/:y.png", async (req, res) => {
+  const { z, x, y } = req.params;
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+
+  if (!apiKey) {
+    return res.status(503).json({ error: "OPENWEATHER_API_KEY is not configured" });
+  }
+
+  try {
+    const response = await axios.get(
+      `https://tile.openweathermap.org/map/precipitation_new/${z}/${x}/${y}.png`,
+      {
+        params: { appid: apiKey },
+        responseType: "arraybuffer",
+        timeout: 5000
+      }
+    );
+
+    res.set("Cache-Control", "public, max-age=300");
+    res.set("Content-Type", "image/png");
+    res.send(response.data);
+  } catch (err) {
+    console.error("Weather tile error:", err.message);
+    res.status(502).send();
+  }
+});
+
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });

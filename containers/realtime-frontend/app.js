@@ -1,7 +1,15 @@
 const map = L.map('map').setView([20, 0], 2);
 
-// 🌙 Dark map
+// Dark map
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+const weatherLayer = L.tileLayer("/api/weather/{z}/{x}/{y}.png", {
+  opacity: 0.55
+});
+
+const lightningLayer = L.tileLayer("https://tile.lightningmaps.org/tiles/{z}/{x}/{y}.png", {
+  opacity: 0.6
+});
 
 // ===== STATE =====
 let flightMarkers = {};
@@ -11,6 +19,17 @@ let quakeMarkers = [];
 
 let showFlights = true;
 let showQuakes = true;
+let showWeather = false;
+let showLightning = false;
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 // ===== ICON =====
 function createPlaneIcon(rotation = 0) {
@@ -80,8 +99,8 @@ async function loadEarthquakes() {
       }).addTo(map);
 
       marker.bindPopup(`
-        🌍 ${eq.properties.place}<br>
-        Magnitude: ${eq.properties.mag}
+        ${escapeHtml(eq.properties.place)}<br>
+        Magnitude: ${escapeHtml(eq.properties.mag)}
       `);
 
       quakeMarkers.push(marker);
@@ -148,8 +167,8 @@ async function loadFlights() {
         ).addTo(map);
 
         marker.bindPopup(`
-          ✈️ ${flight.callsign || "Unknown"}<br>
-          🌍 ${flight.country}
+          Flight: ${escapeHtml(flight.callsign || "Unknown")}<br>
+          Country: ${escapeHtml(flight.country)}
         `);
 
         flightMarkers[id] = marker;
@@ -216,6 +235,8 @@ setInterval(refresh, 20000);
 document.addEventListener("DOMContentLoaded", () => {
   const flights = document.getElementById("toggleFlights");
   const quakes = document.getElementById("toggleQuakes");
+  const weather = document.getElementById("toggleWeather");
+  const lightning = document.getElementById("toggleLightning");
 
   if (flights) {
     flights.addEventListener("change", e => {
@@ -227,5 +248,39 @@ document.addEventListener("DOMContentLoaded", () => {
     quakes.addEventListener("change", e => {
       showQuakes = e.target.checked;
     });
+  }
+
+  if (weather) {
+    weather.addEventListener("change", e => {
+      showWeather = e.target.checked;
+
+      if (showWeather) {
+        weatherLayer.addTo(map);
+      } else {
+        map.removeLayer(weatherLayer);
+      }
+    });
+  }
+
+  if (lightning) {
+    lightning.addEventListener("change", e => {
+      showLightning = e.target.checked;
+
+      if (showLightning) {
+        lightningLayer.addTo(map);
+      } else {
+        map.removeLayer(lightningLayer);
+      }
+    });
+  }
+
+  if (weather && weather.checked) {
+    showWeather = true;
+    weatherLayer.addTo(map);
+  }
+
+  if (lightning && lightning.checked) {
+    showLightning = true;
+    lightningLayer.addTo(map);
   }
 });

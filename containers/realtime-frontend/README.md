@@ -11,6 +11,8 @@ The application:
 * renders a full-screen map using Leaflet
 * loads earthquake data from `/api/earthquakes`
 * loads flight data from `/api/flights`
+* can show rain radar tiles from `/api/weather/{z}/{x}/{y}.png`
+* can show a lightning tile overlay
 * refreshes both datasets every 20 seconds
 
 ## Build

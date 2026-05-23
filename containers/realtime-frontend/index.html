@@ -36,13 +36,21 @@
       font-size: 14px;
       z-index: 1000;
     }
+
+    #controls label {
+      display: block;
+      line-height: 1.8;
+      white-space: nowrap;
+    }
   </style>
 </head>
 
 <body>
   <div id="controls">
-    <label><input type="checkbox" id="toggleFlights" checked> Flights</label><br>
+    <label><input type="checkbox" id="toggleFlights" checked> Flights</label>
     <label><input type="checkbox" id="toggleQuakes" checked> Earthquakes</label>
+    <label><input type="checkbox" id="toggleWeather"> Rain radar</label>
+    <label><input type="checkbox" id="toggleLightning"> Lightning</label>
   </div>
   <div id="map"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

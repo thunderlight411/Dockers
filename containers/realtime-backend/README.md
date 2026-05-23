@@ -8,9 +8,16 @@ This image runs a Node.js service on port `3000` and provides these routes:
 
 * `GET /earthquakes` proxies the USGS all-hour GeoJSON earthquake feed
 * `GET /flights` proxies the OpenSky Network states API
+* `GET /weather/:z/:x/:y.png` proxies OpenWeather precipitation map tiles
 * `GET /health` returns a simple health payload
 
 The service enables CORS and is intended to be consumed directly by a browser app or through a reverse proxy.
+
+## Environment
+
+| Variable | Required | Description |
+| -------- | -------- | ----------- |
+| `OPENWEATHER_API_KEY` | Only for weather overlay | API key used by `/weather/:z/:x/:y.png` |
 
 ## Build
 
@@ -34,6 +41,7 @@ After startup, the API is available at `http://localhost:3000`.
 curl http://localhost:3000/health
 curl http://localhost:3000/earthquakes
 curl http://localhost:3000/flights
+curl http://localhost:3000/weather/2/2/1.png
 ```
 
 ## Compose Example
