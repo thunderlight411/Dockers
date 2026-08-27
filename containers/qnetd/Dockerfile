@@ -14,16 +14,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# SSH
-RUN mkdir -p /run/sshd /root/.ssh
+RUN mkdir -p \
+    /run/sshd \
+    /root/.ssh \
+    /etc/corosync/qnetd
 
-# Persistent QNetD state
-RUN mkdir -p /etc/corosync/qnetd
-
-# qnetd runs as the package-created unprivileged user
 RUN chown -R coroqnetd:coroqnetd /etc/corosync/qnetd
 
-# SSH configuration
 RUN sed -i \
     -e 's/^#PermitRootLogin.*/PermitRootLogin yes/' \
     -e 's/^#PubkeyAuthentication.*/PubkeyAuthentication yes/' \
@@ -38,7 +35,7 @@ VOLUME ["/etc/corosync/qnetd", "/root/.ssh"]
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD corosync-qnetd-tool -s || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
