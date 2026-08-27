@@ -40,8 +40,12 @@ if [ ! -f "${NSSDB_DIR}/cert9.db" ] || \
     echo "NSS database not found."
     echo "Initializing QNetD NSS database..."
 
-    rm -rf "${NSSDB_DIR}"
+    # NSSDB may be a Docker bind mount.
+    # Never remove the mount itself.
     mkdir -p "${NSSDB_DIR}"
+
+    # Remove only existing contents.
+    find "${NSSDB_DIR}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
     corosync-qnetd-certutil -i
 
@@ -50,7 +54,10 @@ else
     echo "Existing NSS database found."
 fi
 
-# Make sure qnetd can access its state
+# --------------------------------------------------
+# Permissions
+# --------------------------------------------------
+
 chown -R coroqnetd:coroqnetd "${QNETD_DIR}"
 
 echo "Starting corosync-qnetd..."
