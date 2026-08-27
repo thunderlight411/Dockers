@@ -37,6 +37,11 @@ Use the per-container guides for environment variables, runtime behavior, and co
 * [containers/realtime-frontend/README.md](containers/realtime-frontend/README.md)
 * [containers/sftp_mysql-downloader/README.md](containers/sftp_mysql-downloader/README.md)
 
+| Container | Description            |
+| --------- | ---------------------- |
+| template  | minimal base container |
+| nginx     | nginx web server       |
+| qnetd     | Corosync QNetD server with SSH |
 ## Build Locally
 
 Build a specific container with the helper script:
@@ -48,6 +53,7 @@ Build a specific container with the helper script:
 ./scripts/build-local.sh realtime-frontend
 ./scripts/build-local.sh sftp_mysql-downloader
 ```
+./scripts/build-local.sh qnetd
 
 The script builds images using the tag format:
 
