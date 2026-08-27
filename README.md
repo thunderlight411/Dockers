@@ -8,11 +8,12 @@ Collection of container images built and maintained in a single repository.
 | --------- | ---------------------- |
 | template  | minimal base container |
 | nginx     | nginx web server       |
+| qnetd     | Corosync QNetD server with SSH |
 
 ## Build locally
 
 ```
-./scripts/build-local.sh nginx
+./scripts/build-local.sh qnetd
 ```
 
 ## Registry
